@@ -15,6 +15,13 @@
     </properties>
 
     <dependencies>
+        <!-- AB dependency-->
+        <dependency>
+            <groupId>org.alicebot</groupId>
+            <artifactId>program-ab</artifactId>
+            <version>1.0</version>
+        </dependency>
+
         <!-- JUnit 5 Dependency -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
