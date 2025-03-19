@@ -1,5 +1,5 @@
     import { useState} from 'react'
-    import ChatWindow from '../components/ChatWindows'
+    import ChatWindow from '../components/ChatWindow'
     import InputBox from '../components/InputBox'
 
     const Home = () => {
