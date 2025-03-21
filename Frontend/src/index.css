@@ -1,8 +1,0 @@
-/* index.css */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-.debug-border {
-  border: 2px solid red !important;
-}
