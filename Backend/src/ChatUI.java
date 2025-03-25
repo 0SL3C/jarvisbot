@@ -20,32 +20,27 @@ public class ChatUI extends HttpServlet{
 
     /// GET Method
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
-            throws ServletException, IOException {
-        String pathInfo = request.getPathInfo(); // Get the subpath after
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String pathInfo = request.getPathInfo();
+    
+        /// Resolve path info
         if (pathInfo == null || pathInfo.equals("/")) {
-            // Serve index.html for /chat or /chat/
-            response.setContentType("text/html");
-            response.setCharacterEncoding("UTF-8");
-            String htmlContent = getStaticFileContent("index.html");
-            if (htmlContent != null) {
-                response.getWriter().write(htmlContent);
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, "index.html not found");
-            }
+            serveFile(response, "index.html");
         } else {
-            // Serve other static files (e.g., /chat/script.js, /chat/style.css)
-            String fileName = pathInfo.substring(1); // Remove leading "/"
-            String contentType = getContentType(fileName);
-            response.setContentType(contentType);
-            response.setCharacterEncoding("UTF-8");
+            String fileName = pathInfo.substring(1);
+            serveFile(response, fileName);
+        }
+    }
 
-            String fileContent = getStaticFileContent(fileName);
-            if (fileContent != null) {
-                response.getWriter().write(fileContent);
-            } else {
-                response.sendError(HttpServletResponse.SC_NOT_FOUND, fileName + " not found");
-            }
+    /// Serve file method
+    private void serveFile(HttpServletResponse response, String fileName) throws IOException {
+        String content = getStaticFileContent(fileName);
+        if (content != null) { 
+            response.setContentType(getContentType(fileName));
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write(content);
+        } else {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, fileName + " not found");
         }
     }
 
