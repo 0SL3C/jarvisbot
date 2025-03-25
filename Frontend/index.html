@@ -183,6 +183,7 @@
     </style>
 </head>
 <body>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <div class="chat-container">
         <!-- Header -->
         <div class="header">
@@ -229,74 +230,6 @@
             <button class="send-btn"><i class='bx bxs-send'></i></button>
         </div>
     </div>
-    <script >
-            const messageInput = document.querySelector('.message-input');
-const sendButton = document.querySelector('.send-btn');
-const chatMessages = document.querySelector('.chat-messages');
-
-// 1. Função para adicionar mensagens
-function addMessage(text, sender) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}-message`;
-    
-    messageDiv.innerHTML = `
-        <p>${text}</p>
-        <span class="timestamp">${new Date().toLocaleTimeString()}</span>
-    `;
-    
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// 2. simultion of messages
-async function mockBackendResponse(userMessage) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const responses = {
-        "hi": "Hello! where you want to travel? 🌍",
-        "Nova York": "Nova York It's 15°C and cloudy. I recommend a light coat!",
-        "default": "Think about your neessity... ✈️"
-    };
-    
-    return responses[userMessage.toLowerCase()] || responses.default;
-}
-
-// 3. indicator of typing
-function showTypingIndicator() {
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'typing-indicator';
-    typingDiv.innerHTML = `
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-    `;
-    chatMessages.appendChild(typingDiv);
-    return typingDiv;
-}
-
-// 4. Handler principal
-async function handleUserMessage() {
-    const userMessage = messageInput.value.trim();
-    if (!userMessage) return;
-
-    addMessage(userMessage, 'user');
-    messageInput.value = '';
-
-    try {
-        const typingIndicator = showTypingIndicator();
-        const botResponse = await mockBackendResponse(userMessage);
-        typingIndicator.remove();
-        addMessage(botResponse, 'bot');
-    } catch (error) {
-        addMessage("Erro de conexão com o servidor", 'system');
-    }
-}
-
-// 5. Event listeners
-sendButton.addEventListener('click', handleUserMessage);
-messageInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleUserMessage();
-}); 
-    </script>
+    <script type="text/javascript" src="script.js"></script>
 </body>
 </html>
