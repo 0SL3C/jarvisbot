@@ -10,7 +10,9 @@ public class ChatWebSocket{
 
     @OnOpen
     public void onOpen(Session session){
-        System.out.println("A new websocket has been established. ID: " + session.getId());
+        System.out.println("\n" + "#".repeat(24));
+        System.out.println("NEW WEBSOCKET ESTABLISHED. ID: " + session.getId());
+        System.out.println("#".repeat(24) + "\n");
         bot = new Bot("jarvis", "Backend/ab", "chat");
         chat = new Chat(bot);
         try{
