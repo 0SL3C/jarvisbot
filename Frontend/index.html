@@ -3,300 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Chat Bot</title>
+    <title>Weather Chat Bot - Grou1</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <style>
-        /* CSS Otimizado - Versão Final */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
-        }
+    <link rel="stylesheet" href="style/style.css">
 
-        body {
-            background: #0f0f20;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .chat-container {
-            width: 390px;
-            height: 640px;
-            background: #fff;
-            border-radius: 20px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        /* Header Styles */
-        .header {
-            background: #0f0f20;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .agent-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .agent-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid #fff;
-        }
-
-        .agent-status {
-            color: white;
-            font-size: 0.8rem;
-        }
-        
-
-        .agent-status span{
-            color: #0f0;
-            font-size: 0.8rem;
-        }
-
-        /* Chat Messages Area */
-        .chat-messages {
-            flex: 1;
-            padding: 1.5rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        /* Message Bubbles */
-        .message {
-            max-width: 80%;
-            padding: 0.8rem;
-            border-radius: 1rem;
-            position: relative;
-        }
-
-        .bot-message {
-            align-self: flex-start;
-            background: #f5f5f5;
-            color: #333;
-            margin-left: 2.5rem;
-        }
-
-        .bot-message::before {
-            content: "";
-            position: absolute;
-            left: -0.8rem;
-            top: 0.8rem;
-            border: 0.5rem solid transparent;
-            border-right-color: #f5f5f5;
-        }
-
-        .user-message {
-            align-self: flex-end;
-            background: #0f0f20;
-            color: #fff;
-            margin-right: 0.5rem;
-        }
-
-        /* Timestamps */
-        .timestamp {
-            display: block;
-            font-size: 0.75rem;
-            color: #666;
-            margin-top: 0.5rem;
-        }
-
-        /* Input Area */
-        .input-container {
-            padding: 1rem;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .message-input {
-            flex: 1;
-            padding: 0.8rem 1.2rem;
-            border: 1px solid #ddd;
-            border-radius: 2rem;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .message-input:focus {
-            border-color: #0f0f20;
-            box-shadow: 0 0 8px rgba(15, 15, 32, 0.1);
-        }
-
-        .send-btn {
-            background: none;
-            border: none;
-            color: #0f0f20;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .send-btn:hover {
-            transform: scale(1.1);
-        }
-        .typing-indicator {
-            display: flex;
-            gap: 5px;
-            padding: 15px;
-            justify-content: flex-start;
-        }
-
-        .typing-indicator .dot {
-            width: 8px;
-            height: 8px;
-            background: #ddd;
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
-        }
-        @keyframes typing {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        /* Mensagens de sistema */
-        .system-message {
-            color: #ff4444;
-            text-align: center;
-            font-size: 0.9em;
-        }
-
-        .chat-container .agent-info h3{
-            color: blue;
-        }
-
-    </style>
 </head>
-<body>
+<body data-theme="dark">
     <div class="chat-container">
-        <!-- Header -->
+        <!-- CABEÇALHO -->
         <div class="header">
             <div class="agent-info">
-                <img src="profile.png" alt="Agent" class="agent-avatar">
-                <div>
+                <div class="avatar-container">
+                    <img src="profile.png" alt="Agent" class="agent-avatar">
+                    <div class="online-dot"></div>
+                </div>
+                <div class="agent-details">
                     <h3>Yi Ivoninax</h3>
-                    <p class="agent-status">Agent: Intuitive Logician <span>(Online)</span></p>
+                    <p class="agent-role">Agent: Intuitive Logician</p>
                 </div>
             </div>
-            <i class='bx bx-x' style="color: white; font-size: 1.5rem;"></i>
+   
+
+            <!-- BOTÕES DE CONTROLE -->
+            <div class="header-controls">
+                <button class="theme-toggle">
+                    <i class='bx bx-moon'></i>
+                </button>
+                <button class="settings-btn">
+                    <i class='bx bx-dots-vertical-rounded'></i>
+                </button>
+            </div>
         </div>
 
-        <!-- Chat Messages -->
+            <!-- MENSAGENS -->
         <div class="chat-messages">
-            <!-- Bot Messages -->
+            <!-- Mensagens padrão -->
             <div class="message bot-message">
                 <p>Hello! Where do you want to go?</p>
                 <span class="timestamp">2 min ago</span>
             </div>
-
-            <!-- User Messages -->
-            <div class="message user-message">
-                <p>Hello!</p>
-                <span class="timestamp">20m ago</span>
-            </div>
-
-            <!-- Bot Follow-up -->
-            <div class="message bot-message">
-                <p>Hi would you like to talk about your trip?</p>
-                <span class="timestamp">3 min ago</span>
-            </div>
-
-            <!-- User Response -->
-            <div class="message user-message">
-                <p>I want to visit Greece. Do you recommend something to wear?</p>
-                <span class="timestamp">Just now</span>
-            </div>
         </div>
 
-        <!-- Input Area -->
+         <!-- ÁREA DE INPUT -->
         <div class="input-container">
-            <input type="text" class="message-input" placeholder="Send a Message">
-            <button class="send-btn"><i class='bx bxs-send'></i></button>
+            <div class="input-wrapper">
+                <input type="text" 
+                       class="message-input" 
+                       placeholder="Write your message" 
+                       autocomplete="off">
+            </div>
+            <button class="send-btn">
+                <i class='bx bx-send'></i>
+            </button>
         </div>
     </div>
-    <script >
-            const messageInput = document.querySelector('.message-input');
-const sendButton = document.querySelector('.send-btn');
-const chatMessages = document.querySelector('.chat-messages');
-
-// 1. Função para adicionar mensagens
-function addMessage(text, sender) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}-message`;
-    
-    messageDiv.innerHTML = `
-        <p>${text}</p>
-        <span class="timestamp">${new Date().toLocaleTimeString()}</span>
-    `;
-    
-    chatMessages.appendChild(messageDiv);
-    chatMessages.scrollTop = chatMessages.scrollHeight;
-}
-
-// 2. simultion of messages
-async function mockBackendResponse(userMessage) {
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    const responses = {
-        "hi": "Hello! where you want to travel? 🌍",
-        "Nova York": "Nova York It's 15°C and cloudy. I recommend a light coat!",
-        "default": "Think about your neessity... ✈️"
-    };
-    
-    return responses[userMessage.toLowerCase()] || responses.default;
-}
-
-// 3. indicator of typing
-function showTypingIndicator() {
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'typing-indicator';
-    typingDiv.innerHTML = `
-        <div class="dot"></div>
-        <div class="dot"></div>
-        <div class="dot"></div>
-    `;
-    chatMessages.appendChild(typingDiv);
-    return typingDiv;
-}
-
-// 4. Handler principal
-async function handleUserMessage() {
-    const userMessage = messageInput.value.trim();
-    if (!userMessage) return;
-
-    addMessage(userMessage, 'user');
-    messageInput.value = '';
-
-    try {
-        const typingIndicator = showTypingIndicator();
-        const botResponse = await mockBackendResponse(userMessage);
-        typingIndicator.remove();
-        addMessage(botResponse, 'bot');
-    } catch (error) {
-        addMessage("Erro de conexão com o servidor", 'system');
-    }
-}
-
-// 5. Event listeners
-sendButton.addEventListener('click', handleUserMessage);
-messageInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') handleUserMessage();
-}); 
-    </script>
+<script src="script.js"></script>
 </body>
-</html>
+</html
