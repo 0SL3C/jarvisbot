@@ -14,6 +14,7 @@ public class ChatWebSocket{
         System.out.println("NEW WEBSOCKET ESTABLISHED. ID: " + session.getId());
         System.out.println("#".repeat(24) + "\n");
         bot = new Bot("jarvis", "Backend/ab", "chat");
+        bot.writeAIMLIFFiles();
         chat = new Chat(bot);
         try{
             session.getBasicRemote().sendText("Hello, how can I help you today?");

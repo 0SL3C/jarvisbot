@@ -19,19 +19,19 @@ public class ServletMain {
 
         /// Create a File Handler pointing to the ./Frontend folder and convert to absolute path
         String webappDir = new File("Frontend").getAbsolutePath();
-        Context ctx = tomcat.addContext("", webappDir);
+        Context ctx = tomcat.addWebapp("/", webappDir);
+
+        /// Add servlet container starter for websocket
+        ctx.addServletContainerInitializer(new WsSci(), null);
 
         /// Add servlet to serve an UI for http://localhost/chat
         Tomcat.addServlet(ctx, "ChatUI", "ChatUI");
-        ctx.addServletMappingDecoded("/chat", "ChatUI");
+        ctx.addServletMappingDecoded("/chat/*", "ChatUI");
 
         /// Add servlet ChatServlet API for POST Requests at http://localhost/chat/api
         Tomcat.addServlet(ctx, "ChatAPI", "ChatAPI");
         ctx.addServletMappingDecoded("/api", "ChatAPI");
 
-        /// Add servlet container starter for websocket
-        ctx.addServletContainerInitializer(new WsSci(), null);
-        
         tomcat.start();
 
         /// Start WebSocket

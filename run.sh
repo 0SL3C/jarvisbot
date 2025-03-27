@@ -1,8 +1,10 @@
 #!/bin/bash
-# Compile app
-echo "Compiling files"
-javac -cp "./Backend/lib/*" ./Backend/src/App.java -d ./Backend/bin
 
-# Run
-echo "Running app..."
-java -cp "./Backend/bin:./Backend/lib/Ab.jar" App
+# Compile all Java files
+echo "Compiling Java files..."
+CLASSPATH="./Backend/lib/*"
+javac -cp "$CLASSPATH" ./Backend/src/*.java -d ./Backend/bin
+
+# Run server
+echo "Starting Tomcat server..."
+java -cp "./Backend/bin:$CLASSPATH" ServletMain

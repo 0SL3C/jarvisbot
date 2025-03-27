@@ -6,17 +6,6 @@ import org.alicebot.ab.*;
 
 @WebServlet
 public class ChatUI extends HttpServlet{
-    private Bot bot;
-    private Chat chat;
-
-    /// Servlet initialization
-    @Override
-    public void init() throws ServletException {
-        /// Creates bot
-        bot = new Bot("jarvis", "Backend/ab", "chat");
-        /// Chat handler with bot
-        chat = new Chat(bot);
-    }
 
     /// GET Method
     @Override
