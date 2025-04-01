@@ -1,114 +1,94 @@
+// Use jQuery to select elements
+const messageInput = $('.message-input');
+const sendButton = $('.send-btn');
+const chatMessages = $('.chat-messages');
 
-
-// ===== CONSTANTES =====
-const DOM = {
-    messageInput: document.querySelector('.message-input'),
-    sendButton: document.querySelector('.send-btn'),
-    chatMessages: document.querySelector('.chat-messages'),
-    themeToggle: document.querySelector('.theme-toggle')
-};
-
-// ===== FUNÇÃO ADICIONADA =====
-function createTypingIndicator() {
-    const typingDiv = document.createElement('div');
-    typingDiv.className = 'message bot-message typing-indicator';
-    typingDiv.innerHTML = `
-        <div style="display: flex; gap: 0.5rem;">
-            <div class="dot" style="animation-delay: 0s"></div>
-            <div class="dot" style="animation-delay: 0.2s"></div>
-            <div class="dot" style="animation-delay: 0.4s"></div>
-        </div>
-    `;
-    return typingDiv;
+/// Websocket setup
+const ws = new WebSocket('ws://localhost:8080/chat');
+ws.onopen = () => {
+    console.log('Connected to WebSocket server');
+}
+ws.onmessage = () => {
+    const botMessage = event.data;
+    addMessage(botMessage, 'bot');
+}
+ws.onerror = (error) => {
+    addMessage('Connection error', 'system');
+}
+ws.onclose = () => {
+    addMessage('Disconnected from server', 'system');
 }
 
-
-// ===== MANIPULAÇÃO DE TEMA =====
-function toggleTheme() {
-    const currentTheme = document.body.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
-    document.body.setAttribute('data-theme', newTheme);
-    DOM.themeToggle.innerHTML = newTheme === 'dark' 
-        ? '<i class="bx bx-moon"></i>' 
-        : '<i class="bx bx-sun"></i>';
-}
-
-// ===== MANIPULAÇÃO DE MENSAGENS =====
-function createMessageElement(text, sender) {
+// Function to add messages
+function addMessage(text, sender) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${sender}-message`;
-    
     messageDiv.innerHTML = `
         <p>${text}</p>
-        <span class="timestamp">${new Date().toLocaleTimeString([], { 
-            hour: '2-digit', 
-            minute: '2-digit' 
-        })}</span>
+        <span class="timestamp">${new Date().toLocaleTimeString()}</span>
     `;
+
+    chatMessages[0].appendChild(messageDiv); // Use [0] since jQuery returns a collection
+    chatMessages[0].scrollTop = chatMessages[0].scrollHeight;
+}
+
+// // 2. simultion of messages
+// async function mockBackendResponse(userMessage) {
+//     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    return messageDiv;
-}
+//     const responses = {
+//         "hi": "Hello! where you want to travel? 🌍",
+//         "Nova York": "Nova York It's 15°C and cloudy. I recommend a light coat!",
+//         "default": "Think about your neessity... ✈️"
+//     };
+    
+//     return responses[userMessage.toLowerCase()] || responses.default;
+// }
 
-async function getWeatherData(city) {
-    try {
-        const response = await fetch('http://localhost:3000/weather', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ city })
-        });
-        
-        return await response.json();
-    } catch (error) {
-        console.error('Erro na requisição:', error);
-        return { error: "Falha na conexão com o servidor" };
-    }
-}
+// // 3. indicator of typing
+// function showTypingIndicator() {
+//     const typingDiv = document.createElement('div');
+//     typingDiv.className = 'typing-indicator';
+//     typingDiv.innerHTML = `
+//         <div class="dot"></div>
+//         <div class="dot"></div>
+//         <div class="dot"></div>
+//     `;
+//     chatMessages.appendChild(typingDiv);
+//     return typingDiv;
+// }
 
-// ===== HANDLERS PRINCIPAIS =====
-async function handleMessageSubmission() {
-    const userMessage = DOM.messageInput.value.trim();
+// Send message via WebSocket
+function sendMessage() {
+    const userMessage = messageInput.val().trim(); // Use .val() for jQuery input value
     if (!userMessage) return;
 
-    // Adiciona mensagem do usuário
-    DOM.chatMessages.appendChild(createMessageElement(userMessage, 'user'));
-    DOM.messageInput.value = '';
-
-    try {
-        // Mostra indicador de digitação
-        const typingIndicator = createTypingIndicator();
-        DOM.chatMessages.appendChild(typingIndicator);
-        
-        // Simula resposta
-        const botResponse = await getWeatherData(userMessage);
-        typingIndicator.remove();
-        DOM.chatMessages.appendChild(createMessageElement(botResponse, 'bot'));
-        
-        // Rolagem automática
-        DOM.chatMessages.scrollTop = DOM.chatMessages.scrollHeight;
-    } catch (error) {
-        DOM.chatMessages.appendChild(createMessageElement("Connection error. Please try again.", 'bot'));
-    }
+    addMessage(userMessage, 'user');
+    ws.send(userMessage);
+    messageInput.val(''); // Clear input using jQuery
 }
 
-// ===== INICIALIZAÇÃO =====
-function initEventListeners() {
-    // Envio de mensagem
-    DOM.sendButton.addEventListener('click', handleMessageSubmission);
-    DOM.messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') handleMessageSubmission();
-    });
+// // 4. Handler principal
+// async function handleUserMessage() {
+//     const userMessage = messageInput.value.trim();
+//     if (!userMessage) return;
 
-    // Toggle de tema
-    DOM.themeToggle.addEventListener('click', toggleTheme);
+//     addMessage(userMessage, 'user');
+//     messageInput.value = '';
 
-    // Microinteração no input
-    DOM.messageInput.addEventListener('input', (e) => {
-        DOM.sendButton.style.transform = e.target.value.length > 0 
-            ? 'scale(1.1)' 
-            : 'scale(1)';
-    });
-}
+//     try {
+//         const typingIndicator = showTypingIndicator();
+//         const botResponse = await mockBackendResponse(userMessage);
+//         typingIndicator.remove();
+//         addMessage(botResponse, 'bot');
+//     } catch (error) {
+//         addMessage("Erro de conexão com o servidor", 'system');
+//     }
+// }
 
-// Inicia a aplicação
-document.addEventListener('DOMContentLoaded', initEventListeners);
+// Event listeners
+sendButton.on('click', sendMessage); // Use jQuery .on() instead of addEventListener
+sendButton.on('click', console.log("Button triggered"));
+messageInput.on('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage() && console.log("Enter triggered");
+}); 
