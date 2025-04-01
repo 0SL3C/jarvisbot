@@ -1,0 +1,366 @@
+ /* CSS Optimized - Final version */
+
+ :root {
+  --primary-color: #6a11cb;
+  --secondary-color: #2575fc;
+  --bg-dark: #0f0f20;
+  --fog-color: rgba(255,255,255,0.02);
+}
+
+body {
+  background: linear-gradient(-45deg, #0f0f20, #1e1e42, #2d2d5a, #4a4a8f);
+  background-size: 400% 400%;
+  animation: skyAnimation 15s ease infinite;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+
+
+.chat-container {
+  position: relative;
+  z-index: 9999;
+  background: rgb(15, 15, 32, 0.9);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+.chat-messages::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+.message .card {
+  max-width: 80%;
+  transition: transform 0.3s ease;
+}
+
+.bot-message .card {
+  border-radius: 0 15px 15px 15px;
+  background: linear-gradient(135deg, #1e1e42, #2d2d5a);
+}
+
+.user-message .card {
+  border-radius: 15px 0 15px 15px;
+  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+}
+
+.form-control:focus {
+  background: var(--bg-dark);
+  color: white;
+  box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.25);
+}
+
+.bg-gray-800 {
+  background: #1a1a2e;
+}
+
+
+
+
+
+
+/* Header Styles */
+.header {
+  background: #0f0f20;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.agent-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.agent-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+}
+
+.agent-status {
+  color: white;
+  font-size: 0.8rem;
+}
+
+
+.agent-status span{
+  color: #0f0;
+  font-size: 0.8rem;
+}
+
+/* Chat Messages Area */
+
+.chat-messages::-webkit-scrollbar {
+  width: 8px;
+}
+.chat-messages::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+  border-radius: 4px;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+
+
+
+
+
+
+/* Message Bubbles */
+.message {
+  max-width: 80%;
+  padding: 0.8rem;
+  border-radius: 1rem;
+  position: relative;
+}
+
+.bot-message {
+  align-self: flex-start;
+  background: #f5f5f5;
+  color: #333;
+  margin-left: 2.5rem;
+}
+
+.bot-message::before {
+  content: "";
+  position: absolute;
+  left: -0.8rem;
+  top: 0.8rem;
+  border: 0.5rem solid transparent;
+  border-right-color: #f5f5f5;
+}
+
+.user-message {
+  align-self: flex-end;
+  background: #0f0f20;
+  color: #fff;
+  margin-right: 0.5rem;
+}
+
+
+
+
+
+/* Timestamps */
+.timestamp {
+  display: block;
+  font-size: 0.75rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+/* Input Area */
+.input-container {
+  padding: 1rem;
+  border-top: 1px solid #eee;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.input-container{
+  flex: 1;
+  display: flex;
+}
+
+.message-input {
+  flex: 1;
+  padding: 0.8rem 1.2rem;
+  border: 1px solid #ddd;
+  border-radius: 2rem;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.message-input:focus {
+  border-color: #0f0f20;
+  box-shadow: 0 0 8px rgba(15, 15, 32, 0.1);
+}
+
+.send-btn {
+  background: none;
+  border: none;
+  color: #0f0f20;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.send-btn:hover {
+  transform: scale(1.1);
+}
+
+.typing-indicator {
+  display: flex;
+  gap: 5px;
+  padding: 15px;
+  justify-content: flex-start;
+}
+
+.typing-indicator .dot {
+  width: 8px;
+  height: 8px;
+  background: #ddd;
+  border-radius: 50%;
+  animation: typing 1.4s infinite;
+}
+@keyframes typing {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+/* Mensagens de sistema */
+.system-message {
+  color: #ff4444;
+  text-align: center;
+  font-size: 0.9em;
+}
+
+.chat-container .agent-info h3{
+  color: blue;
+}
+
+
+
+/* Animations */
+@keyframes floatIn {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fall {
+  from { transform: translateY(-100vh); }
+  to { transform: translateY(100vh) rotate(360deg); }
+}
+
+@keyframes skyAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fog-movement {
+  0% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(1.2); }
+  100% { opacity: 0.3; transform: scale(1); }
+}
+
+@keyframes cloud-float {
+  0% { transform: translateX(-100%) translateY(0); }
+  50% { transform: translateX(100%) translateY(-20px); }
+  100% { transform: translateX(100%) translateY(0); }
+}
+
+.cloud {
+  position: fixed;
+  opacity: 0.1;
+  z-index: 1;
+  font-size: 3rem;
+  animation: cloud-float 20s linear infinite;
+  pointer-events: none;
+}
+
+.message {
+  animation: floatIn 0.3s ease-out;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+  .main-div {
+    height: 100vh;
+    max-width: 100%;
+    border-radius: 0;
+  }
+
+  .message-input {
+    font-size: 13px;
+  }
+}
+
+
+.weather-effects {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.weather-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/*rain drops*/
+.rain{
+  position: absolute;
+  width: 2px;
+  height: 50px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.3), transparent);
+  animation: fall 1s linear infinite;
+}
+
+@keyframes fall{
+  from { transform: translateY(-100vh) translateX(-10px);}
+  to { transform: translateY(100vh) translateX(10px);}
+}
+
+/* Styles for climate effects */
+.rain-drop {
+  position: fixed;
+  width: 2px;
+  height: 50px;
+  background: linear-gradient(to bottom, rgba(100, 180, 255, 0.6), transparent);
+  animation: fall 1s linear infinite;
+  z-index: 1;
+}
+
+.fog-layer {
+  position: fixed;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, 
+    var(--fog-color) 0%, 
+    rgba(0,0,0,0.8) 100%);
+  animation: fog-movement 20s linear infinite;
+  left: -50%;
+  top: -50%;
+}
