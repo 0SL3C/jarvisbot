@@ -38,7 +38,6 @@ public class ServletMain {
         ServerContainer wsContainer = (ServerContainer) ctx.getServletContext().getAttribute(ServerContainer.class.getName()); /// Create a container at context
         wsContainer.addEndpoint(ServerEndpointConfig.Builder.create(ChatWebSocket.class, "/chat").build()); /// Add endpoint to that container
 
-
         System.out.println("Tomcat server started on port 8080");
         tomcat.getServer().await();
     }
