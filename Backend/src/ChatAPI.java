@@ -30,8 +30,9 @@ public class ChatAPI extends HttpServlet {
         }
 
         String requestBody = buffer.toString();
-        String botResponse = chat.multisentenceRespond(requestBody);
-
+        
+        String botResponse = new MessageHandler(chat).processMessage(requestBody);
+        
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(botResponse);
@@ -42,6 +43,6 @@ public class ChatAPI extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
-        response.getWriter().write("ChatServlet API is active. Use POST to chat.");
+        response.getWriter().write("ChatServlet API is active. Use POST method to chat.");
     }
 }
