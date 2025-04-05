@@ -5,182 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Weather Chat Bot</title>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <style>
-        /* CSS Otimizado - Versão Final */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        body {
-            background: #0f0f20;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .chat-container {
-            width: 390px;
-            height: 640px;
-            background: #fff;
-            border-radius: 20px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-
-        /* Header Styles */
-        .header {
-            background: #0f0f20;
-            padding: 1rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .agent-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .agent-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: 2px solid #fff;
-        }
-
-        .agent-status {
-            color: white;
-            font-size: 0.8rem;
-        }
-        
-
-        .agent-status span{
-            color: #0f0;
-            font-size: 0.8rem;
-        }
-
-        /* Chat Messages Area */
-        .chat-messages {
-            flex: 1;
-            padding: 1.5rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        /* Message Bubbles */
-        .message {
-            max-width: 80%;
-            padding: 0.8rem;
-            border-radius: 1rem;
-            position: relative;
-        }
-
-        .bot-message {
-            align-self: flex-start;
-            background: #f5f5f5;
-            color: #333;
-            margin-left: 2.5rem;
-        }
-
-        .bot-message::before {
-            content: "";
-            position: absolute;
-            left: -0.8rem;
-            top: 0.8rem;
-            border: 0.5rem solid transparent;
-            border-right-color: #f5f5f5;
-        }
-
-        .user-message {
-            align-self: flex-end;
-            background: #0f0f20;
-            color: #fff;
-            margin-right: 0.5rem;
-        }
-
-        /* Timestamps */
-        .timestamp {
-            display: block;
-            font-size: 0.75rem;
-            color: #666;
-            margin-top: 0.5rem;
-        }
-
-        /* Input Area */
-        .input-container {
-            padding: 1rem;
-            border-top: 1px solid #eee;
-            display: flex;
-            gap: 0.5rem;
-            align-items: center;
-        }
-
-        .message-input {
-            flex: 1;
-            padding: 0.8rem 1.2rem;
-            border: 1px solid #ddd;
-            border-radius: 2rem;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .message-input:focus {
-            border-color: #0f0f20;
-            box-shadow: 0 0 8px rgba(15, 15, 32, 0.1);
-        }
-
-        .send-btn {
-            background: none;
-            border: none;
-            color: #0f0f20;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .send-btn:hover {
-            transform: scale(1.1);
-        }
-        .typing-indicator {
-            display: flex;
-            gap: 5px;
-            padding: 15px;
-            justify-content: flex-start;
-        }
-
-        .typing-indicator .dot {
-            width: 8px;
-            height: 8px;
-            background: #ddd;
-            border-radius: 50%;
-            animation: typing 1.4s infinite;
-        }
-        @keyframes typing {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        /* Mensagens de sistema */
-        .system-message {
-            color: #ff4444;
-            text-align: center;
-            font-size: 0.9em;
-        }
-
-        .chat-container .agent-info h3{
-            color: blue;
-        }
-
-    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link href='style.css' rel='stylesheet'>
 </head>
 <body>
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
@@ -188,7 +14,7 @@
         <!-- Header -->
         <div class="header">
             <div class="agent-info">
-                <img src="profile.png" alt="Agent" class="agent-avatar">
+                <img src="Profile.png" alt="Agent" class="agent-avatar">
                 <div>
                     <h3>Yi Ivoninax</h3>
                     <p class="agent-status">Agent: Intuitive Logician <span>(Online)</span></p>
@@ -198,38 +24,30 @@
         </div>
 
         <!-- Chat Messages -->
-        <div class="chat-messages">
-            <!-- Bot Messages -->
-            <div class="message bot-message">
-                <p>Hello! Where do you want to go?</p>
-                <span class="timestamp">2 min ago</span>
-            </div>
-
-            <!-- User Messages -->
-            <div class="message user-message">
-                <p>Hello!</p>
-                <span class="timestamp">20m ago</span>
-            </div>
-
-            <!-- Bot Follow-up -->
-            <div class="message bot-message">
-                <p>Hi would you like to talk about your trip?</p>
-                <span class="timestamp">3 min ago</span>
-            </div>
-
-            <!-- User Response -->
-            <div class="message user-message">
-                <p>I want to visit Greece. Do you recommend something to wear?</p>
-                <span class="timestamp">Just now</span>
-            </div>
-        </div>
-
+        <div class="chat-messages"></div>
         <!-- Input Area -->
         <div class="input-container">
-            <input type="text" class="message-input" placeholder="Send a Message">
-            <button class="send-btn"><i class='bx bxs-send'></i></button>
+            <div id="weatherSearch">
+                <div class="search-container">
+                    <input type="text" id="cityInput" placeholder="Search for a city...">
+                    <div id="suggestions"></div>
+                    <input type="date">
+                </div>
+                <div class="search-container">
+                    <input type="text" id="cityInput" placeholder="Search for a city...">
+                    <div id="suggestions"></div>
+                    <input type="date">
+                </div>
+                <div>
+                    <button class="send-btn"><i class='bx bxs-send'></i></button>
+                </div>
+            </div>
+            <button id="planningTrigger" type="button" class="btn send-btn">Weather</button>
+            <!-- <input type="text" class="message-input" placeholder="Send a Message"> -->
+            
         </div>
     </div>
     <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript" src="citiesSearch.js"></script>
 </body>
 </html>

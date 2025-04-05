@@ -5,11 +5,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class WeatherDataTest {
-    WeatherData cityData = new WeatherData();
+    WeatherData cityData;
     
     @BeforeEach
     void setUp(){
-        cityData.setApiKey("be74631d6c15530aad0e592d5c66b18e");
+        System.setProperty("API_KEY", "be74631d6c15530aad0e592d5c66b18e");
+        cityData = new WeatherData();
     }
     
     @Test

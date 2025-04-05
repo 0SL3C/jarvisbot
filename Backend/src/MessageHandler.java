@@ -8,7 +8,6 @@ public class MessageHandler {
     private Chat chat;
 
     public MessageHandler(){
-
     }
 
     /// Initiate MessageHandler with Web Socket Session
@@ -18,6 +17,7 @@ public class MessageHandler {
 
     public String processMessage(String message){
         StringBuilder response;
+        
         String botResponse = chat.multisentenceRespond(message);
         
         if(botResponse.toLowerCase().startsWith("weather:")){
@@ -38,7 +38,6 @@ public class MessageHandler {
                 // Convert day string to Date
                 Date targetDate = convertDayToDate(day);
                 WeatherData cityWeather = new WeatherData(location, targetDate);
-                cityWeather.setApiKey("be74631d6c15530aad0e592d5c66b18e");
 
                 // Capitalize the city name and include the day
                 response.append(String.format("%s%s on %s: ", 
