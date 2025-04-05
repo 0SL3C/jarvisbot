@@ -91,4 +91,44 @@ sendButton.on('click', sendMessage); // Use jQuery .on() instead of addEventList
 sendButton.on('click', console.log("Button triggered"));
 messageInput.on('keypress', (e) => {
     if (e.key === 'Enter') sendMessage() && console.log("Enter triggered");
-}); 
+});
+
+
+//weather painel
+
+const apiKey = "be74631d6c15530aad0e592d5c66b18e";
+const city = "iturama";
+
+
+async function getWeather() {
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
+
+    try{
+    const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`);
+    const data = await response.json();
+
+    //update sidebar
+    document.querySelector(".weather-icon").textContent = getWeatherIcon(data.weather[0].main);
+    document.querySelector(".weather-temp").textContent = `${Math.round(data.main.temp)}°C`;
+    document.querySelector(".weather-desc").textContent = data.weather[0].description;
+    document.querySelector(".weather-city").textContent = data.name;
+} catch (error) {
+    console.error("Error when seeking climate data:", error);
+}
+}
+
+function getWeatherIcon(weather) {
+    switch (weather) {
+        case "Clear": return "☀️";
+    case "Clouds": return "☁️";
+    case "Rain": return "🌧️";
+    case "Thunderstorm": return "⛈️";
+    case "Snow": return "❄️";
+    case "Drizzle": return "🌦️";
+    case "Mist":
+    case "Fog": return "🌫️";
+    default: return "🌡️";
+  }
+}
+
+document.addEventListener("DOMContentLoaded", getWeather);
