@@ -1,3 +1,4 @@
 Backend/bin
 *.class
 .vscode/*
+API_KEY.txt

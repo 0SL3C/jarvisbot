@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# Check if API_KEY is already set
-if [ -z "$API_KEY" ]; then
+# Check if API_KEY.txt exists and has content
+if [ ! -f "API_KEY.txt" ] || [ ! -s "API_KEY.txt" ]; then
     read -p "Enter your API key: " API_KEY
-    export API_KEY
+    echo "$API_KEY" > API_KEY.txt
+    echo "API key saved to API_KEY.txt"
 else
-    echo "Using existing API_KEY environment variable: $API_KEY"
+    echo "Using existing API key from API_KEY.txt"
+    API_KEY=$(cat API_KEY.txt)
 fi
 
 # Compile all Java files
