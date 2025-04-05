@@ -9,8 +9,9 @@ public class WeatherDataTest {
     
     @BeforeEach
     void setUp(){
-        System.setProperty("API_KEY", "be74631d6c15530aad0e592d5c66b18e");
+        String API_KEY = "be74631d6c15530aad0e592d5c66b18e";
         cityData = new WeatherData();
+        cityData.setAPI_KEY(API_KEY);
     }
     
     @Test

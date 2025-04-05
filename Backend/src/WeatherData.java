@@ -10,7 +10,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class WeatherData {
-    static final String API_KEY = System.getenv("API_KEY");
+    public String API_KEY = System.getenv("API_KEY");
+    public void setAPI_KEY(String API_KEY){
+        this.API_KEY = API_KEY;
+    }
     public String city;
     public double temperature;
     public Date date;
@@ -96,7 +99,7 @@ public class WeatherData {
 
             // Create HttpClient instance
             HttpClient client = HttpClient.newHttpClient();
-            String url = String.format("https://api.openweathermap.org/data/2.5/forecast?q=%s&units=metric&APPID=%s", encodedCity, WeatherData.API_KEY);
+            String url = String.format("https://api.openweathermap.org/data/2.5/forecast?q=%s&units=metric&APPID=%s", encodedCity, this.API_KEY);
 
             System.out.println(url);
             // Build the HTTP GET request
