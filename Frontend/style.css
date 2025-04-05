@@ -1,22 +1,10 @@
 /* ===== Modern Dark Theme Improvements ===== */
 
 /* General Styles */
-@media (max-width: 768px) {
-  .city-row {
-    flex-direction: column;
-  }
-  .search-container {
-    width: 100%;
-  }
-  .date-input {
-    width: 100%;
-  }
-}
-
 body {
-  background: linear-gradient(135deg, #0d0d1d, #09121f);
-  color: #f5efef;
-  font-family: 'Arial', sans-serif;
+  background-color: #121212;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
   margin: 0;
   padding: 0;
   height: 100vh;
@@ -24,38 +12,49 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: hidden;
+  overflow: auto;
   font-size: 16px;
 }
 
 .chat-container {
-  background: linear-gradient(145deg, #1a1a1a, #2d2d2d);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-}
-
-.chat-header {
-  background: linear-gradient(90deg, #1a1a1a, #2d2d2d);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Messages - Glassmorphism Effect */
-
-.bot-message {
-  margin-top: 15px;
-  align-self: flex-start; /* Alinha à esquerda */
+  height: 90vh; 
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
 }
 
+.chat-header {
+  padding: 20px;
+  background-color: #1f1f1f;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Avatar */
+.profile-img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+
+/* Messages - Glassmorphism Effect */
+
+.bot-message {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+}
+
 .bot-message .card {
-  background: rgba(40, 40, 40, 0.7);
-  backdrop-filter: blur(5px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: transform 0.3s ease;
-  align-self: left;
-  background: linear-gradient(45deg, #d1d5db, #c9d4e3);
-  box-shadow: 0 4px 15px rgba(211, 218, 228, 0.3);
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #2e2e2e, #3a3a3a);
+  color: #ffffff;
 }
 
 .bot-message p{
@@ -67,13 +66,18 @@ body {
   background: linear-gradient(45deg, #010811, #b4c4db);
   background: rgba(40, 40, 40, 0.7);
 }
+
 .user-message {
-  margin-top: 15px;
-  align-self: flex-end; /* Alinha à direita */
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
 }
 .user-message .card {
-  background: linear-gradient(45deg, #010811, #0051cc);
-  box-shadow: 0 4px 15px rgba(0, 102, 255, 0.3);
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  background: linear-gradient(45deg, #0051cc, #003b99);
+  color: #ffffff;
 }
 
 /* Input Area Modernization */
@@ -153,150 +157,195 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   animation: messageEntry 0.4s ease-out;
 }
 
-.chat-messages{
+/* === CHAT CONTAINER === */
+.chat-messages {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 16px;
   padding: 20px;
-  min-height: 400px; /* Minimum height to avoid overlap */
-}
-/* Personalized scrollbar*/
-.chat-messages::-webkit-scrollbar {
-  width: 8px;
-}
-
-.chat-messages::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.chat-messages::-webkit-scrollbar-thumb {
-  background: linear-gradient(45deg, #00ff88, #00cc6a);
-  border-radius: 4px;
-}
-
-.suggestions-box {
-  position: absolute;
-  width: 100%;
-  background: rgba(40, 40, 40, 0.95);
-  border-radius: 8px;
-  margin-top: 5px;
-  max-height: 200px;
+  height: 60vh;
   overflow-y: auto;
-  z-index: 1000;
+  background-color: #1a1a1a;
 }
 
-.suggestions-box div {
-  padding: 10px 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease;
-}
-
-.suggestions-box div:hover {
-  background: rgba(255, 255, 255, 0.05);
-  cursor: pointer;
-}
-
-.agent-avatar {
-  width: 48px;  /* Tamanho reduzido (era 40px) */
-  height: 48px;
-  object-fit: cover;
-  border: 2px solid #fff;
-  border-radius: 50%; /* Garante que fique redondo */
-}
-.chat-header .d-flex.align-items-center.gap-3 {
-  flex-shrink: 0; /* Impede que o elemento encolha */
-}
-
-.chat-header img {
-  max-width: 100%;
-  height: auto;
-}
-
-/* Botão de adicionar cidade */
-.add-city-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50% !important;
-  padding: 0;
+/* Mensagem do Bot */
+.bot-message {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-.add-city-btn:hover {
-  transform: scale(1.1);
-}
-
-/* Efeito para botões escondidos */
-.hidden {
-  display: none !important;
-}
-
-/* Layout das linhas de cidade */
-
-/* Container principal para cada linha de cidade */
-.city-row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 15px;
-  align-items: center;
+  justify-content: flex-start;
   width: 100%;
 }
 
-.date-input {
-  background: rgba(50, 50, 50, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+.bot-message .card {
+  max-width: 75%;
+  background: linear-gradient(135deg, #2e2e2e, #3c3c3c);
   color: white;
-  padding: 10px;
-  border-radius: 8px;
-  width: auto;
-  cursor: pointer;
+  border-radius: 16px 16px 16px 4px;
+  padding: 12px 16px;
+  border: none;
 }
+
+/* Mensagem do Usuário */
+.user-message {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.user-message .card {
+  max-width: 75%;
+  background: linear-gradient(135deg, #004ecb, #003e99);
+  color: white;
+  border-radius: 16px 16px 4px 16px;
+  padding: 12px 16px;
+  border: none;
+  text-align: right;
+}
+
+/* === INPUT E CONTROLES === */
+.input-container {
+  background-color: #000000;
+  padding: 20px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+.city-row {
+  margin-top: 10px;
+}
+
+
+.city-input-group{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
 .search-container {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(50, 50, 50, 0.8);
+  flex-wrap: wrap;
+}
+
+.message-input,
+.date-input {
+  background-color: #2c2c2c;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 10px;
   border-radius: 8px;
-  padding: 10px;
-  flex: 1;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex: 2;
+  min-width: 180px;
 }
-.city-input ::placeholder {
-  font-size: 14px;
-  font-weight: 400;
-}
-.add-city-btn {
-  background: linear-gradient(45deg, #00ff88, #00cc6a);
-  border: none;
-  padding: 10px;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
+.date-btn-group {
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: transform 0.3s ease;
+  gap: 10px;
 }
 
-#cityContainer{
-  overflow: auto;
-  max-height: 300px;
+.message-input::placeholder {
+  color: #aaa;
 }
 
-.weather-response {
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.weather-response h6 {
-  color: #00ff88;
-  margin-bottom: 5px;
-}
-
-.recommendation {
-  background: rgba(206, 152, 152, 0.1);
-  padding: 8px;
+.add-city-btn {
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  padding: 8px 12px;
   border-radius: 6px;
+  transition: background-color 0.3s;
+  height: 100%;
+}
+
+.add-city-btn:hover {
+  background-color: #0b5ed7;
+  cursor: pointer;
+}
+
+/* Sugestões (autocomplete) */
+.suggestions-box {
+  position: absolute;
+  background: #1f1f1f;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  margin-top: 5px;
+  z-index: 999;
+  width: 100%;
+  color: white;
+}
+.suggestions-box div {
+  padding: 10px;
+  cursor: pointer;
+}
+.suggestions-box div:hover {
+  background-color: #333;
+}
+
+/* Responsivo */
+@media screen and (max-width: 768px) {
+  .chat-messages {
+    height: 50vh;
+  }
+
+
+  .add-city-btn,
+  .send-btn {
+    width: 100%;
+  }
+}
+
+
+.typing-indicator {
+  display: flex;
+  gap: 4px;
   margin-top: 10px;
 }
+
+
+.bot-message .card-body small,
+.user-message .card-body small {
+  color: #ccc !important;
+  font-size: 0.75rem;
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+.message small {
+  color: #ccc !important;  /* Clareia a cor pra ficar mais legível no fundo escuro */
+  font-size: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.message-input:focus, .date-input:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 2px rgba(13,110,253,0.25);
+}
+
+.weather-sidebar {
+  position: fixed;
+  right: -300px;
+  top: 0;
+  height: 100%;
+  width: 300px;
+  background: #111;
+  color: white;
+  transition: right 0.3s ease;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.weather-sidebar.open {
+  right: 0;
+}
+
+
+/* ======== FIM DO CSS ======== */
