@@ -121,7 +121,7 @@ public class WeatherData {
                 return null;
             }
     
-            // 🔠 Normalize: remover espaços e forçar lowercase
+            
             String normalized = this.city.trim().toLowerCase();
             String encodedCity = URLEncoder.encode(normalized, StandardCharsets.UTF_8);
     
@@ -135,7 +135,7 @@ public class WeatherData {
                 encodedCity, WeatherData.API_KEY
             );
     
-            System.out.println("🔗 URL final: " + url); // 👈 Importantíssimo
+            System.out.println("🔗 URL final: " + url); 
     
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))

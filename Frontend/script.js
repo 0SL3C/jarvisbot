@@ -165,7 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
         // -------------------------
-        // 🌤️ SIDEBAR TOGGLE
+        // 🌤️ SIDEBAR 
         // -------------------------
         const sidebar = document.getElementById("weatherSidebar");
         const toggleBtn = document.getElementById("toggleSidebarBtn");;
@@ -194,7 +194,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const sidebar = document.getElementById("weatherSidebar");
     const sidebarContent = document.getElementById("sidebarContent");
 
-    // Here you can simulate more data or adapt to show everyone from JSON if you have
+    
     sidebarContent.innerHTML = `
         <h5>${city}</h5>    
         <p><strong>Day:</strong> ${weekday}, ${fullDateText}</p>
