@@ -18,6 +18,6 @@ This project is an assignment of Software Development 2 course in Griffith Colle
   - [ ] Servlet Test
   - [X] Weather Data Test
   - [ ] WebSocket test
-  - [ ] Chat REST API test
+  - [X] Chat REST API test
 
 
