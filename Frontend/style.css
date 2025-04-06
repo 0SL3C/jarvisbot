@@ -81,10 +81,6 @@ body {
 }
 
 /* Input Area Modernization */
-.input-container {
-  background: rgba(30, 30, 30, 0.9);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-}
 
 
 input[type="text"], input[type="date"] {
@@ -162,8 +158,8 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 20px;
-  height: 60vh;
+  padding: 10px;
+  height: 45vh;
   overflow-y: auto;
   background-color: #1a1a1a;
 }
@@ -207,6 +203,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   padding: 20px;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
+  background: rgba(30, 30, 30, 0.9);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  flex-direction: column;
+  gap: 10px;
 }
 .city-row {
   margin-top: 10px;
@@ -220,13 +220,23 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   flex-wrap: wrap;
 }
 
+.city-input-group .search-container{
+  flex-direction: column;
+  width: 100%;
+}
+
 .search-container {
   display: flex;
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
-
+.message-input,
+  .date-input,
+  .add-city-btn,
+  .send-btn {
+    width: 100%;
+  }
 .message-input,
 .date-input {
   background-color: #2c2c2c;
@@ -283,8 +293,11 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 
 /* Responsivo */
 @media screen and (max-width: 768px) {
-  .chat-messages {
-    height: 50vh;
+  .chat-header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+    gap: 10px;
   }
 
 
@@ -329,23 +342,90 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-color: #0d6efd;
   box-shadow: 0 0 0 2px rgba(13,110,253,0.25);
 }
-
+/* Sidebar Styles (Cinematic) */
 .weather-sidebar {
   position: fixed;
   right: -300px;
   top: 0;
   height: 100%;
   width: 300px;
-  background: #111;
+  background: rgba(18, 18, 18, 0.85);
   color: white;
-  transition: right 0.3s ease;
-  padding: 20px;
+  backdrop-filter: blur(12px);
+  border-left: 2px solid rgba(0, 255, 136, 0.4);
+  box-shadow: -10px 0 30px rgba(0, 255, 136, 0.1);
+  transition: right 0.5s ease-in-out;
+  padding: 24px;
   z-index: 1000;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow-y: auto;
+}
+
+#sidebarContent {
+  animation: fadeIn 1s ease-in-out;
 }
 
 .weather-sidebar.open {
   right: 0;
 }
 
+.weather-sidebar h4 {
+  text-align: center;
+  color: #00ffcc;
+  font-weight: bold;
+  font-size: 1.4rem;
+  letter-spacing: 0.5px;
+}
+
+.weather-sidebar strong {
+  color: #ffcb05;
+}
+
+.weather-sidebar p {
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.weather-icon {
+  font-size: 3rem;
+  text-align: center;
+  animation: flicker 2s infinite;
+  color: #00ffd5;
+  margin-bottom: 20px;
+}
+
+@keyframes flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+    opacity: 1;
+  }
+  20%, 22%, 24%, 55% {
+    opacity: 0.4;
+  }
+}
+
+#toggleSidebarBtn {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: linear-gradient(135deg, #00cc6a, #00994d);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  z-index: 1001;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+#toggleSidebarBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 255, 136, 0.5);
+}
 
 /* ======== FIM DO CSS ======== */

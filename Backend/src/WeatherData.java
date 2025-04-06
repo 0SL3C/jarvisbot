@@ -8,20 +8,39 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import java.io.File;
+import java.util.Scanner;
 
 public class WeatherData {
-    static final String API_KEY = System.getenv("API_KEY");
+
+    static final String API_KEY = "be74631d6c15530aad0e592d5c66b18e";
+
+    private static String loadApiKey() {
+        String envKey = System.getenv("API_KEY");
+    if (envKey != null && !envKey.isEmpty()) return envKey;
+
+    try {
+        Scanner scanner = new Scanner(new File("API_KEY"));
+        if (scanner.hasNextLine()) {
+            return scanner.nextLine().trim();
+        }
+    } catch (Exception e) {
+        System.out.println("❌ Não foi possível carregar a API_KEY: " + e.getMessage());
+    }
+    return null;
+}
     public String city;
     public double temperature;
     public Date date;
     private JSONObject apiData;
+    
     
     public WeatherData(){
         this.date = new Date();
     }
     
     public WeatherData(String city){
-        this.city = city;
+        this.city = city.trim().toLowerCase();
         this.date = new Date();
     }
     
@@ -73,13 +92,18 @@ public class WeatherData {
             this.apiData = this.getAPIdata();
         }
 
-        // If API data is still null, return city not found message
-        if (this.apiData == null) {
+       
+    
+        if (this.apiData == null || 
+            !this.apiData.has("main") || 
+            !this.apiData.has("weather")) {
+            System.out.println("❌ Campos ausentes ou apiData nula.");
             return String.format("City not found: %s", this.city);
         }
 
         double temperature = this.getTemperature();
         String description = this.getDescription();
+
         if(temperature > 20){
             return String.format("%.2f°C. Warm day, %s.<br>You should wear shorts 🩳 and T-Shirts 👕",temperature, description);
         }else if(temperature < 20 && temperature > 10){
@@ -89,50 +113,81 @@ public class WeatherData {
         }
     }
 
+
     public JSONObject getAPIdata(){
         try {
-            // Encode the city name to handle spaces and special characters
-            String encodedCity = URLEncoder.encode(this.city, StandardCharsets.UTF_8);
-
-            // Create HttpClient instance
+            if (this.city == null || this.city.isEmpty()) {
+                System.out.println("❌ City is null or empty!");
+                return null;
+            }
+    
+            // 🔠 Normalize: remover espaços e forçar lowercase
+            String normalized = this.city.trim().toLowerCase();
+            String encodedCity = URLEncoder.encode(normalized, StandardCharsets.UTF_8);
+    
+            // 🔍 Verificação extra
+            System.out.println("🌍 City requisitada: " + this.city);
+            System.out.println("🌐 URL codificada: " + encodedCity);
+    
             HttpClient client = HttpClient.newHttpClient();
-            String url = String.format("https://api.openweathermap.org/data/2.5/forecast?q=%s&units=metric&APPID=%s", encodedCity, WeatherData.API_KEY);
-
-            System.out.println(url);
-            // Build the HTTP GET request
+            String url = String.format(
+                "https://api.openweathermap.org/data/2.5/forecast?q=%s&units=metric&APPID=%s",
+                encodedCity, WeatherData.API_KEY
+            );
+    
+            System.out.println("🔗 URL final: " + url); // 👈 Importantíssimo
+    
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(url))
                     .GET()
                     .build();
+
+                HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                System.out.println("🔎 API Response Body: " + response.body());
+
             
+            /// Analisa a resposta JSON
+        JSONObject jsonObject = new JSONObject(response.body());
 
-            // Send the request and store the response
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            // Parse the JSON response and return it
-            JSONObject jsonObject = new JSONObject(response.body());
-            JSONArray forecastList = jsonObject.getJSONArray("list");
-
-            // Initialize the JSONObject
-            JSONObject result = null;
-
-            /// Iterator to find the closest date
-            long closestTimeDifference = Long.MAX_VALUE;
-            for(int i=0; i < forecastList.length(); i++){
-                JSONObject iObj = forecastList.getJSONObject(i);
-                Date iDate = new Date(iObj.getLong("dt"));
-
-                long timeDifference = Math.abs(iDate.getTime() - this.date.getTime());
-                if(timeDifference < closestTimeDifference){
-                    closestTimeDifference = timeDifference;
-                    result = iObj;
-                }
-            }
-            return result;
-        }
-        catch(Exception e){
-            e.printStackTrace();
+           // Verifica erro 404 (cidade não encontrada)
+        if (jsonObject.has("cod") && jsonObject.get("cod").toString().equals("404")) {
+            System.out.println("❌ Cidade não encontrada na API.");
             return null;
         }
+
+        JSONArray forecastList = jsonObject.getJSONArray("list");
+        JSONObject result = null;
+        long closestTimeDifference = Long.MAX_VALUE;
+
+        System.out.println("🔄 Procurando previsão mais próxima para: " + this.date);
+
+        for (int i = 0; i < forecastList.length(); i++) {
+            JSONObject iObj = forecastList.getJSONObject(i);
+            long timestamp = iObj.getLong("dt") * 1000L;
+            Date forecastDate = new Date(timestamp);
+
+
+            System.out.println("⏰ Previsão disponível: " + forecastDate);
+
+            long timeDifference = Math.abs(forecastDate.getTime() - this.date.getTime());
+
+            if (timeDifference < closestTimeDifference) {
+                closestTimeDifference = timeDifference;
+                result = iObj;
+            }
+        }
+
+        if (result == null) {
+    System.out.println("⚠️ Nenhuma previsão próxima foi encontrada!");
+} else {
+    System.out.println("✅ Previsão selecionada: " + result.getString("dt_txt"));
+
+        }
+
+        return result;
+    } catch(Exception e){
+        e.printStackTrace();
+        return null;
     }
+  }
 }

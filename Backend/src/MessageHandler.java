@@ -15,39 +15,65 @@ public class MessageHandler {
         this.chat = chat;
     }
 
-    public String processMessage(String message){
+    public String processMessage(String message) {
         StringBuilder response;
         
         String botResponse = chat.multisentenceRespond(message);
         
-        if(botResponse.toLowerCase().startsWith("weather:")){
-            response = new StringBuilder("Forecast for\n<br>");
-
-            // Fetch weather locations and separate them by comma (city:dow, city:dow)
-            String[] locationDayPairs = botResponse.substring(8).split(","); 
-
-            for (String pair : locationDayPairs) {
-                String[] parts = pair.split(":");
-                if (parts.length != 2) {
-                    response.append("Invalid format for: ").append(pair).append("<br>");
-                    continue;
-                }
-                String location = parts[0].trim();
-                String day = parts[1].trim();
-
-                // Convert day string to Date
-                Date targetDate = convertDayToDate(day);
-                WeatherData cityWeather = new WeatherData(location, targetDate);
-
-                // Capitalize the city name and include the day
-                response.append(String.format("%s%s on %s: ", 
-                location.substring(0, 1).toUpperCase(), location.substring(1), day));
-                response.append(cityWeather.genCloth()).append("<br><br>");
-            }
-            return response.toString();
-        }
-        return botResponse.toString();
+        // Simula como se o bot tivesse retornado "weather:..."
+    if (message.toLowerCase().startsWith("weather:")) {
+        botResponse = message;
     }
+
+    if (botResponse.toLowerCase().startsWith("weather:")) {
+        response = new StringBuilder("Forecast for<br>");
+
+        String[] locationDayPairs = botResponse.substring(8).split(",");
+
+        if (locationDayPairs.length > 5) {
+            return "⚠️ Son, five cities is enough to predict the future. Do not rush the time.<br>";
+        }
+
+        for (String pair : locationDayPairs) {
+            String[] parts = pair.split(":");
+            if (parts.length != 2) {
+                response.append("⚠️ What is this? <strong>")
+                        .append(pair)
+                        .append("</strong>? That’s not how we talk weather here, champ. Use format: <em>city:day</em><br>");
+                continue;
+            }
+
+            String location = parts[0].trim();
+            String day = parts[1].trim();
+
+            // Converte "today" corretamente
+            Date targetDate = convertDayToDate(day);
+
+            // Validação de data passada
+            Date today = new Date();
+            if (targetDate.before(today)) {
+                response.append("⚠️ Son, you cannot predict the past. Try again.<br>");
+                continue;
+            }
+
+            // Capitaliza o nome da cidade para buscar corretamente
+            String normalizedCity = location.substring(0, 1).toUpperCase() + location.substring(1).toLowerCase();
+            WeatherData cityWeather = new WeatherData(normalizedCity, targetDate);
+
+            // Formata a data como "Monday, April 7"
+            SimpleDateFormat prettyFormat = new SimpleDateFormat("EEEE, MMMM d");
+            String formattedDate = prettyFormat.format(targetDate);
+
+            // Monta a resposta final
+            response.append(String.format("%s on %s: ", normalizedCity, formattedDate));
+            response.append(cityWeather.genCloth()).append("<br><br>");
+        }
+
+        return response.toString();
+    }
+
+    return botResponse.toString();
+}
 
     // Convert day string (e.g., "Monday") to a Date relative to today (April 3, 2025)
     private Date convertDayToDate(String day) {

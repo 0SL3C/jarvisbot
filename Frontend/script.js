@@ -6,12 +6,12 @@ const chatMessages = $('.chat-messages');
 // Websocket setup
 const ws = new WebSocket('ws://localhost:8080/chat');
 
-// Função para adicionar mensagens formatadas
+// Function to add formatted messages
 function addMessage(text, sender) {
     const messageDiv = document.createElement('div');
     messageDiv.className = `message ${sender}-message mb-3`;
     
-    // Formatação diferente para bot e user
+    // Different formatting for bot and user
     if(sender === 'bot') {
         messageDiv.innerHTML = `
             <div class="card bg-dark text-white border-0">
@@ -69,8 +69,30 @@ function sendMessage() {
 }
 
 sendButton.on('click', () => {
-    console.log("Button triggered");
-    sendMessage();
+    const rows = document.querySelectorAll(".city-row");
+    let parts = [];
+
+    rows.forEach(row => {
+        const cityInput = row.querySelector(".message-input");
+        const dateInput = row.querySelector(".date-input");
+
+        const city = cityInput?.value?.trim();
+        const date = dateInput?.value?.trim();
+
+        if(city && date){
+            const day = new Date(date).toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+            parts.push(`${city.toLowerCase()}:${day}`);
+        }
+    });
+
+    if (parts.length > 0 ){
+        const fullMessge = `weather:${parts.join(",")}`;
+
+        addMessage(fullMessge, 'user'); // Display the message in the chat
+        ws.send(fullMessge);// Send the message to the server
+    } else {
+        alert("Please fill in all fields before sending.");
+    }
 });
 
 messageInput.on('keypress', (e) => {
@@ -83,7 +105,23 @@ $(document).ready(function() {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+
+    messageInput.focus(); // Focus on the input field when the page loads
+
+
+
     const cityContainer = document.getElementById("cityContainer");
+    const today = new Date().toISOString().split('T')[0];
+
+    // Sets the minimum date to today and future days
+    const applyMinDate = () => {
+        document.querySelectorAll(".date-input").forEach(input => {
+            input.setAttribute("min", today);
+        });
+    };
+
+    applyMinDate(); // Apply the minimum date on load
+
     let cityCount = 1; // Cities accountant
   
     cityContainer.addEventListener("click", function (e) {
@@ -98,6 +136,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Hide the current button
         addButton.style.display = "none";
+
+
   
         // Creates the new city field
         const newRow = document.createElement("div");
@@ -105,22 +145,62 @@ document.addEventListener("DOMContentLoaded", () => {
   
         newRow.innerHTML = `
           <div class="search-container d-flex align-items-center gap-2 mt-2">
-            <input type="text" class="message-input" placeholder="Search for a city...">
-            <input type="date" class="date-input">
-            <button class="add-city-btn btn btn-outline-light">
-              <i class='bx bx-plus'></i>
-            </button>
-          </div>
-        `;
+          <input type="text" class="message-input" placeholder="Search for a city...">
+          <input type="date" class="date-input">
+          <button class="add-city-btn btn btn-outline-light">
+            <i class='bx bx-plus'></i>
+          </button>
+        </div>
+      `;
   
         // Adds the new field to the interface
         cityContainer.appendChild(newRow);
-
         cityCount++; // Increments the city count
   
         // Makes the new button visible
         const newButton = newRow.querySelector(".add-city-btn");
         newButton.style.display = "block";
+
+        applyMinDate(); // Apply the minimum date to the new input field
       }
     });
-  })
+        // -------------------------
+        // 🌤️ SIDEBAR TOGGLE
+        // -------------------------
+        const sidebar = document.getElementById("weatherSidebar");
+        const toggleBtn = document.getElementById("toggleSidebarBtn");;
+        if (toggleBtn && sidebar) {
+            toggleBtn.addEventListener("click", () => {
+              sidebar.classList.toggle("open");
+              console.log("🔄 Sidebar toggled");
+            });
+          } else {
+            console.log("❌ Sidebar or button not found");
+          }
+        });
+
+        //adds event to capture clicks in Bot messages
+        $(document).on("click", ".bot-message .card", function () {
+    const messageText = $(this).find("p").html();
+    
+    // Extrais City and Date with Simple Regex
+    const match = messageText.match(/([A-Za-z\s]+) on ([A-Za-z]+), ([A-Za-z]+ \d+)/);
+    if (!match) return;
+
+    const city = match[1].trim();
+    const weekday = match[2];
+    const fullDateText = match[3];
+
+    const sidebar = document.getElementById("weatherSidebar");
+    const sidebarContent = document.getElementById("sidebarContent");
+
+    // Here you can simulate more data or adapt to show everyone from JSON if you have
+    sidebarContent.innerHTML = `
+        <h5>${city}</h5>    
+        <p><strong>Day:</strong> ${weekday}, ${fullDateText}</p>
+        <p><strong>Weather:</strong> ${messageText.split('<br>')[1]}</p>
+        <p><strong>Clothing Advice:</strong> ${messageText.split('<br>')[2]}</p>
+    `;
+
+    sidebar.classList.add("open");
+});
