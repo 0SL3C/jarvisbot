@@ -151,7 +151,7 @@ public class WeatherData {
 
            // Verifica erro 404 (cidade não encontrada)
         if (jsonObject.has("cod") && jsonObject.get("cod").toString().equals("404")) {
-            System.out.println("❌ Cidade não encontrada na API.");
+           // System.out.println("❌ Cidade não encontrada na API.");
             return null;
         }
 
@@ -159,7 +159,7 @@ public class WeatherData {
         JSONObject result = null;
         long closestTimeDifference = Long.MAX_VALUE;
 
-        System.out.println("🔄 Procurando previsão mais próxima para: " + this.date);
+       // System.out.println("🔄 Procurando previsão mais próxima para: " + this.date);
 
         for (int i = 0; i < forecastList.length(); i++) {
             JSONObject iObj = forecastList.getJSONObject(i);
@@ -167,7 +167,7 @@ public class WeatherData {
             Date forecastDate = new Date(timestamp);
 
 
-            System.out.println("⏰ Previsão disponível: " + forecastDate);
+          //  System.out.println("⏰ Previsão disponível: " + forecastDate);
 
             long timeDifference = Math.abs(forecastDate.getTime() - this.date.getTime());
 
