@@ -8,7 +8,10 @@ if [ ! -f "API_KEY.txt" ] || [ ! -s "API_KEY.txt" ]; then
 else
     echo "Using existing API key from API_KEY.txt"
     API_KEY=$(cat API_KEY.txt)
+    echo $API_KEY
 fi
+
+export API_KEY
 
 # Compile all Java files
 echo "Compiling Java files..."
