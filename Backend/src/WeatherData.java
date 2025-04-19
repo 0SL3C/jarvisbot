@@ -14,8 +14,8 @@ import org.json.JSONObject;
 public class WeatherData {
     private static final String API_KEY = "be74631d6c15530aad0e592d5c66b18e";
 
-    private String city;
-    private Date date;
+    public String city;
+    public Date date;
     private JSONObject apiData;
 
     public WeatherData() {
