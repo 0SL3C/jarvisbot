@@ -30,9 +30,11 @@ public class ChatAPI extends HttpServlet {
         }
 
         String requestBody = buffer.toString();
-        
-        String botResponse = new MessageHandler(chat).processMessage(requestBody);
-        
+
+        MessageHandler handler = new MessageHandler(chat);
+        String botResponse = handler.processMessage(requestBody);
+
+        /// Send response back to client
         response.setContentType("text/plain");
         response.setCharacterEncoding("UTF-8");
         response.getWriter().write(botResponse);

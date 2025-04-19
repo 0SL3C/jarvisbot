@@ -1,171 +1,166 @@
 // Use jQuery to select elements
-const messageInput = $('.message-input');
+const messageInput = $('#cityInput'); 
 const sendButton = $('.send-btn');
 const chatMessages = $('.chat-messages');
 
-/// Websocket setup
+// Websocket setup
 const ws = new WebSocket('ws://localhost:8080/chat');
+
+// Function to add formatted messages
+function addMessage(text, sender) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${sender}-message mb-3`;
+    
+    // Different formatting for bot and user
+    if(sender === 'bot') {
+        messageDiv.innerHTML = `
+            <div class="card bg-dark text-white border-0">
+                <div class="card-body p-3">
+                    <p class="mb-0">${text.replace(/\n/g, '<br>')}</p>
+                    <small class="text-muted">${new Date().toLocaleTimeString()}</small>
+                </div>
+            </div>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div class="card bg-primary text-white border-0">
+                <div class="card-body p-3">
+                    <p class="mb-0">${text}</p>
+                    <small class="text-white-50">${new Date().toLocaleTimeString()}</small>
+                </div>
+            </div>
+        `;
+    }
+
+    chatMessages.append(messageDiv);
+    const messagesContainer = $('.chat-messages')[0];
+    messagesContainer.scrollTo({
+        top: messagesContainer.scrollHeight,
+        behavior: 'smooth'
+    });
+}
+
+// WebSocket handlers
 ws.onopen = () => {
     console.log('Connected to WebSocket server');
+    addMessage('Connected to travel assistant', 'bot');
 }
-ws.onmessage = () => {
-    const botMessage = event.data;
-    addMessage(botMessage, 'bot');
+
+ws.onmessage = (event) => {
+    addMessage(event.data, 'bot');
 }
+
 ws.onerror = (error) => {
-    addMessage('Connection error', 'system');
+    addMessage('Connection error: ' + error.message, 'system');
 }
+
 ws.onclose = () => {
     addMessage('Disconnected from server', 'system');
 }
 
-// Function to add messages
-function addMessage(text, sender) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}-message`;
-    messageDiv.innerHTML = `
-        <p>${text}</p>
-        <span class="timestamp">${new Date().toLocaleTimeString()}</span>
-    `;
-
-    chatMessages[0].appendChild(messageDiv); // Use [0] since jQuery returns a collection
-    chatMessages[0].scrollTop = chatMessages[0].scrollHeight;
-}
-
-// // 2. simultion of messages
-// async function mockBackendResponse(userMessage) {
-//     await new Promise(resolve => setTimeout(resolve, 1000));
-    
-//     const responses = {
-//         "hi": "Hello! where you want to travel? 🌍",
-//         "Nova York": "Nova York It's 15°C and cloudy. I recommend a light coat!",
-//         "default": "Think about your neessity... ✈️"
-//     };
-    
-//     return responses[userMessage.toLowerCase()] || responses.default;
-// }
-
-// // 3. indicator of typing
-// function showTypingIndicator() {
-//     const typingDiv = document.createElement('div');
-//     typingDiv.className = 'typing-indicator';
-//     typingDiv.innerHTML = `
-//         <div class="dot"></div>
-//         <div class="dot"></div>
-//         <div class="dot"></div>
-//     `;
-//     chatMessages.appendChild(typingDiv);
-//     return typingDiv;
-// }
-
-// Send message via WebSocket
+// Send message function
 function sendMessage() {
-    const userMessage = messageInput.val().trim(); // Use .val() for jQuery input value
+    const userMessage = messageInput.val().trim();
     if (!userMessage) return;
 
     addMessage(userMessage, 'user');
     ws.send(userMessage);
-    messageInput.val(''); // Clear input using jQuery
+    messageInput.val('');
 }
 
-// // 4. Handler principal
-// async function handleUserMessage() {
-//     const userMessage = messageInput.value.trim();
-//     if (!userMessage) return;
+sendButton.on('click', () => {
+    const rows = document.querySelectorAll(".city-row");
+    let parts = [];
 
-//     addMessage(userMessage, 'user');
-//     messageInput.value = '';
+    rows.forEach(row => {
+        const cityInput = row.querySelector(".message-input");
+        const dateInput = row.querySelector(".date-input");
 
-//     try {
-//         const typingIndicator = showTypingIndicator();
-//         const botResponse = await mockBackendResponse(userMessage);
-//         typingIndicator.remove();
-//         addMessage(botResponse, 'bot');
-//     } catch (error) {
-//         addMessage("Erro de conexão com o servidor", 'system');
-//     }
-// }
+        const city = cityInput?.value?.trim();
+        const date = dateInput?.value?.trim();
 
-// Event listeners
-sendButton.on('click', sendMessage); // Use jQuery .on() instead of addEventListener
-sendButton.on('click', console.log("Button triggered"));
-messageInput.on('keypress', (e) => {
-    if (e.key === 'Enter') sendMessage() && console.log("Enter triggered");
-});
-
-
-//weather painel
-// Render 5-day forecast cards
-function renderForecastCards(forecastData) {
-    const forecastContainer = $('.forecast-container');
-    forecastContainer.html(''); // Clear existing content using jQuery
-
-    forecastData.forEach(day => {
-        const card = $('<div>').addClass('forecast-card');
-        card.html(`
-            <h3>${day.date}</h3>
-            <p>Temperature: ${day.temperature}°C</p>
-            <p>Condition: ${day.condition}</p>
-        `);
-        forecastContainer.append(card);
-    });
-}
-
-// Sample forecast data
-const sampleForecastData = [
-    { date: '2023-10-01', temperature: 20, condition: 'Sunny' },
-    { date: '2023-10-02', temperature: 18, condition: 'Cloudy' },
-    { date: '2023-10-03', temperature: 22, condition: 'Rainy' },
-    { date: '2023-10-04', temperature: 19, condition: 'Windy' },
-    { date: '2023-10-05', temperature: 21, condition: 'Sunny' }
-];
-
-// Function to fetch weather forecast data from server
-function fetchWeatherForecast(location) {
-    // This would normally be an API call to the server
-    // For now, we'll just return the sample data
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve(sampleForecastData);
-        }, 500);
-    });
-}
-
-// Function to update weather forecast when a location is mentioned
-function updateWeatherForecast(location) {
-    fetchWeatherForecast(location)
-        .then(data => {
-            renderForecastCards(data);
-            $('.forecast-section').show();
-        })
-        .catch(error => {
-            console.error('Error fetching weather data:', error);
-        });
-}
-
-// Initialize forecast section (hidden by default)
-$(document).ready(function() {
-    // Add forecast container if it doesn't exist
-    if ($('.forecast-container').length === 0) {
-        $('body').append(`
-            <div class="forecast-section">
-                <h2>Weather Forecast</h2>
-                <div class="forecast-container"></div>
-            </div>
-        `);
-        $('.forecast-section').hide();
-    }
-    
-    // Modify the WebSocket message handler to check for location mentions
-    ws.onmessage = (event) => {
-        const botMessage = event.data;
-        addMessage(botMessage, 'bot');
-        
-        // Check if message contains location information
-        if (botMessage.includes('°C') && botMessage.includes('recommend')) {
-            // Extract location from previous user message
-            const lastUserMessage = $('.user-message p').last().text();
-            updateWeatherForecast(lastUserMessage);
+        if(city && date){
+            const day = new Date(date).toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+            parts.push(`${city.toLowerCase()}:${day}`);
         }
-    };
+    });
+
+    if (parts.length > 0 ){
+        const fullMessge = `weather:${parts.join(",")}`;
+
+        addMessage(fullMessge, 'user'); // Display the message in the chat
+        ws.send(fullMessge);// Send the message to the server
+    } else {
+        alert("Please fill in all fields before sending.");
+    }
 });
+
+messageInput.on('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});
+
+// Automatic focus on Input field
+$(document).ready(function() {
+    messageInput.focus();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    messageInput.focus(); // Focus on the input field when the page loads
+
+
+
+    const cityContainer = document.getElementById("cityContainer");
+    const today = new Date().toISOString().split('T')[0];
+
+    // Sets the minimum date to today and future days
+    const applyMinDate = () => {
+        document.querySelectorAll(".date-input").forEach(input => {
+            input.setAttribute("min", today);
+        });
+    };
+
+    applyMinDate(); // Apply the minimum date on load
+
+    let cityCount = 1; // Cities accountant
+  
+    cityContainer.addEventListener("click", function (e) {
+      // Checks if the Add City button has been clicked
+      if (e.target.closest(".add-city-btn")) {
+        const addButton = e.target.closest(".add-city-btn");
+  
+        if (cityCount >= 5) {
+            alert("You can only add up to 5 cities.");
+            return;
+        }
+
+        // Hide the current button
+        addButton.style.display = "none";
+
+
+  
+        // Creates the new city field
+        const newRow = document.createElement("div");
+        newRow.classList.add("city-row");
+  
+        newRow.innerHTML = `
+          <div class="search-container d-flex align-items-center gap-2 mt-2">
+          <input type="text" class="message-input" placeholder="Search for a city...">
+          <input type="date" class="date-input">
+          <button class="add-city-btn btn btn-outline-light">
+            <i class='bx bx-plus'></i>
+          </button>
+        </div>
+      `;
+  
+        // Adds the new field to the interface
+        cityContainer.appendChild(newRow);
+        cityCount++; // Increments the city count
+  
+        // Makes the new button visible
+        const newButton = newRow.querySelector(".add-city-btn");
+        newButton.style.display = "block";
+
+        applyMinDate(); // Apply the minimum date to the new input field
+      }
+    });

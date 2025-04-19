@@ -9,12 +9,12 @@ function loadCities() {
             cities = data.split('\n')
                 .map(city => city.trim())
                 .filter(city => city.length > 0);
-            $('#cityInput').prop('disabled', false);
+            $('.text-input').prop('disabled', false);
             console.log(`Loaded ${cities.length} cities`);
         },
         error: function(xhr, status, error) {
             console.error('Error loading cities:', error);
-            $('#cityInput').attr('placeholder', 'Error loading cities');
+            $('.text-input').attr('placeholder', 'Error loading cities');
         }
     });
 }
@@ -29,7 +29,7 @@ function debounce(func, wait) {
 }
 
 // Optimized search function with limit
-function searchCities(query, maxResults = 5) {
+function searchCities(query, $inputField, maxResults = 5) {
     const q = query.toLowerCase();
     const results = [];
     let count = 0;
@@ -47,7 +47,7 @@ function searchCities(query, maxResults = 5) {
             break;
         }
     }
-    displaySuggestions(results);
+    displaySuggestions(results, $inputField);
 }
 
 // Binary search for starting point
@@ -68,23 +68,32 @@ function binarySearchStart(query) {
     return left;
 }
 
-// Display suggestions using jQuery
-function displaySuggestions(filteredCities) {
+function displaySuggestions(filteredCities, $inputField) {
     const $suggestions = $('#suggestions');
     $suggestions.empty();
     
-    if (filteredCities.length > 0 && $('#cityInput').val().trim() !== '') {
+    if (filteredCities.length > 0 && $inputField.val().trim() !== '') {
         $.each(filteredCities, function(index, city) {
             $('<div>')
                 .addClass('suggestion-item')
                 .text(city)
                 .on('click', function() {
-                    $('#cityInput').val(city);
+                    $inputField.val(city);
                     $suggestions.hide();
                 })
                 .appendTo($suggestions);
         });
-        $suggestions.show();
+        const pos = $inputField.position();
+        const suggestionsHeight = $suggestions.outerHeight();
+        
+        // Position the suggestions dropdown above the input field
+        $suggestions.css({
+            top: pos.top - suggestionsHeight, // Position above the input field
+            left: pos.left,
+            width: $inputField.outerWidth(),
+            position: 'absolute',
+            zIndex: 1000,
+        }).show();
     } else {
         $suggestions.hide();
     }
@@ -94,19 +103,20 @@ function displaySuggestions(filteredCities) {
 $(document).ready(function() {
     const debouncedSearch = debounce(searchCities, 200);
 
-    $('#cityInput').on('input', function() {
-        debouncedSearch($(this).val());
+    // Use event delegation to handle dynamically added inputs
+    $(document).on('input', '.text-input', function() {
+        debouncedSearch($(this).val(), $(this));
     });
 
-    $(document).on('click', function(e) {
-        if (!$(e.target).closest('#cityInput, #suggestions').length) {
-            $('#suggestions').hide();
+    $(document).on('focus', '.text-input', function() {
+        if ($(this).val().trim() !== '') {
+            searchCities($(this).val(), $(this));
         }
     });
 
-    $('#cityInput').on('focus', function() {
-        if ($(this).val().trim() !== '') {
-            searchCities($(this).val());
+    $(document).on('click', function(e) {
+        if (!$(e.target).closest('.text-input, #suggestions').length) {
+            $('#suggestions').hide();
         }
     });
 

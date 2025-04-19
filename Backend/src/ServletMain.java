@@ -30,7 +30,7 @@ public class ServletMain {
 
         /// Add servlet ChatServlet API for POST Requests at http://localhost/chat/api
         Tomcat.addServlet(ctx, "ChatAPI", "ChatAPI");
-        ctx.addServletMappingDecoded("/api", "ChatAPI");
+        ctx.addServletMappingDecoded("/chat/api", "ChatAPI");
 
         tomcat.start();
 
