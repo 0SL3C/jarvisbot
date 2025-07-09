@@ -1,0 +1,4 @@
+0,HI IM PLANNING A TRIP TO * LOCATIONS IN * DAYS CAN YOU HELP ME PLAN MY CLOTHING REQUIREMENTS,*,*,Hi! I would love to help you plan your clothing. Please tell me the locations you will be visiting and the days you’ll be there. For example#Comma you could say: "I’ll be visiting Paris on Monday#Comma Tokyo on Tuesday#Comma etc.,weather.aiml
+0,_ PLANNING *,*,*,Hi! I would love to help you plan your clothing. Please tell me the locations you will be visiting and the days you’ll be there. For example#Comma you could say: "I’ll be visiting Paris on Monday#Comma Tokyo on Tuesday#Comma etc.,weather.aiml
+0,WHAT DID YOU JUST SAY,*,*,I last said: <that/>,weather.aiml
+0,WEATHER *,*,*,weather:<star/>,weather.aiml

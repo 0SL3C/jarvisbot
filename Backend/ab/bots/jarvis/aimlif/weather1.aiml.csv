@@ -1,0 +1,2 @@
+0,I WILL BE VISITING <SET>CITIES</SET> ON <SET>DOW</SET>,*,*,<srai>#Newline                WEATHERCHECK1#Newline                <think>#Newline                    <set name="loc1"><star index="1"/></set>#Newline                    <set name="day1"><star index="2"/></set>#Newline                </think>#Newline            </srai>,weather1.aiml
+0,WEATHERCHECK1,*,*,weather:<get name="loc1"/>:<get name="day1"/>,weather1.aiml

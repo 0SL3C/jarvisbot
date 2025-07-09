@@ -1,0 +1,1 @@
+0,WEATHERCHECK3,*,*,weather:<get name="loc1"/>:<get name="day1"/>#Comma<get name="loc2"/>:<get name="day2"/>#Comma<get name="loc3"/>:<get name="day3"/>,weather3.aiml
